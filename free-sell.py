@@ -11,6 +11,16 @@ ui = pygame.sprite.LayeredUpdates()
 suits = ['H', 'D', 'C', 'S']
 ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
+x_t = 0
+y_t = 0
+for suit in suits:
+    for rank in ranks:
+        card = class_Card.Card(x_t, y_t, suit, rank, layer=0)
+        cards.add(card, layer=card.layer)
+        x_t += 80
+    y_t += 120
+
+
 card1 = class_Card.Card(400, 300, 'H', 'A', layer=0)  # ハートのエースを作成
 card2 = class_Card.Card(500, 300, 'S', 'K', layer=0)  # スペードのキングを作成
 card2.pos = (500, 300)  # カード2の位置を設定
@@ -50,15 +60,15 @@ while running:
 
     #カードの更新と描画
     cards.update()
-    for card in cards:
-        screen.blit(card.image, card.rect)
+    for c in cards:
+        screen.blit(c.image, c.rect)
 
     # マウスの位置を取得
-    x, y = pygame.mouse.get_pos()
+    mouse_pos = pygame.mouse.get_pos()
 
     # その位置に丸を描く
-    pygame.draw.circle(screen, (255, 0, 0), (x, y), 5)
-    pygame.draw.circle(screen, (0, 0, 0), (x,y), 5, 2)
+    pygame.draw.circle(screen, (255, 0, 0), mouse_pos, 5)
+    pygame.draw.circle(screen, (0, 0, 0), mouse_pos, 5, 2)
 
     pygame.display.update()
     clock.tick(60)
