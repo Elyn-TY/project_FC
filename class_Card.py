@@ -14,7 +14,7 @@ class Card(pygame.sprite.Sprite):
             self.image,
             (224, 224, 224),      # 塗りつぶし色
             self.image.get_rect(),
-            border_radius=15      # 丸みの度合い(枠と合わせること！)
+            border_radius=10      # 丸みの度合い(枠と合わせること！)
             )
 
         self.rect = self.image.get_rect(center=self.pos)
@@ -43,7 +43,7 @@ class Card(pygame.sprite.Sprite):
             (0, 0, 0), 
             self.image.get_rect(), 
             width=2,
-            border_radius=15)  # カードの枠線
+            border_radius=10)  # カードの枠線
         self.base_image = self.image.copy()  # 元の画像を保存
         self.mask = pygame.mask.from_surface(self.image)  # マスクを作成
         
@@ -59,5 +59,5 @@ class Card(pygame.sprite.Sprite):
                 (255, 255, 0),  # 黄色のハイライト
                 self.image.get_rect(),
                 width=5,
-                border_radius=15
+                border_radius=10
             )

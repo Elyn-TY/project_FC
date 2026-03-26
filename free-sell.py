@@ -8,6 +8,8 @@ pygame.display.set_caption("Card Game Example")
 
 cards = pygame.sprite.LayeredUpdates()
 ui = pygame.sprite.LayeredUpdates()
+suits = ['H', 'D', 'C', 'S']
+ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
 card1 = class_Card.Card(400, 300, 'H', 'A', layer=0)  # ハートのエースを作成
 card2 = class_Card.Card(500, 300, 'S', 'K', layer=0)  # スペードのキングを作成
