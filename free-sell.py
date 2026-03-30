@@ -21,12 +21,16 @@ for suit in suits:
     y_t += 120
 
 
+
 card1 = class_Card.Card(400, 300, 'H', 'A', layer=0)  # ハートのエースを作成
 card2 = class_Card.Card(500, 300, 'S', 'K', layer=0)  # スペードのキングを作成
 card2.pos = (500, 300)  # カード2の位置を設定
 
 cards.add(card1, layer=card1.layer)
 cards.add(card2, layer=card2.layer)
+
+dragging_card = None
+
 
 clock = pygame.time.Clock()
 
@@ -38,25 +42,37 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if card1.rect.collidepoint(event.pos):
-                card1.dragging = True
-                cards.change_layer(card1, 999)  # ドラッグ中のカードを最前面に移動(uiよりは下)
+            clicked_cards = []
+            for card in cards:
+                if card.rect.collidepoint(event.pos):
+                    clicked_cards.append(card)
+            if clicked_cards:
+                top_card = max(clicked_cards, key=lambda c: cards.get_layer_of_sprite(c))  # 最前面のカードを選択
+                dragging_card = top_card
+                dragging_card.dragging = True
+                cards.change_layer(dragging_card, cards.get_top_layer() + 1)
         elif event.type == pygame.MOUSEBUTTONUP:
-            card1.dragging = False
-            cards.change_layer(card1, card1.layer)  # ドラッグ終了後に元のレイヤーに戻す
+            if dragging_card:
+                dragging_card.dragging = False
+                cards.change_layer(dragging_card, dragging_card.layer)  # ドラッグ終了後に元のレイヤーに戻す
+                dragging_card = None
         elif event.type == pygame.MOUSEMOTION:
-            if card1.dragging:
-                card1.target_pos = event.pos
-                cards.change_layer(card1, cards.get_top_layer() + 1)  # ドラッグ中のカードを常に最前面に移動(uiよりは下)
+            if dragging_card:
+                dragging_card.target_pos = event.pos
+                cards.change_layer(dragging_card, cards.get_top_layer() + 1)  # ドラッグ中のカードを常に最前面に移動(uiよりは下)
     
-
-
-    if card1.mask.overlap(card2.mask, offset=(card2.rect.x - card1.rect.x, card2.rect.y - card1.rect.y)):
-        card1.colliding = True
-        card2.colliding = True
-    else:
-        card1.colliding = False
-        card2.colliding = False
+#すべてのカード同士の衝突をチェック
+    for card in cards:
+        others = [c for c in cards if c != card]
+        for other in others:
+            if card.dragging:
+                if card.mask.overlap(other.mask, offset=(other.rect.x - card.rect.x, other.rect.y - card.rect.y)):
+                    card.colliding = True
+                    other.colliding = True
+                else:
+                    card.colliding = False
+                    other.colliding = False
+            #必要ならここに衝突していないカードの処理を追加
 
     #カードの更新と描画
     cards.update()
