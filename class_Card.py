@@ -2,6 +2,8 @@
 import pygame
 
 
+#レイヤーの分類の詳細はmemo.txtを参照
+
 class Card(pygame.sprite.Sprite):
     def __init__(self, x, y, suit, rank, layer=0):
         super().__init__()   #Spriteクラスの初期化
@@ -43,7 +45,8 @@ class Card(pygame.sprite.Sprite):
             (0, 0, 0), 
             self.image.get_rect(), 
             width=2,
-            border_radius=10)  # カードの枠線
+            border_radius=10
+            )  # カードの枠線
         self.base_image = self.image.copy()  # 元の画像を保存
         self.mask = pygame.mask.from_surface(self.image)  # マスクを作成
         
@@ -52,7 +55,14 @@ class Card(pygame.sprite.Sprite):
         self.image = self.base_image.copy()  # カードの画像をリセット
         if self.dragging:
             self.rect.center = self.target_pos
-        
+            pygame.draw.rect(
+                self.image, 
+                (0, 255, 0),  # 緑色のハイライト
+                self.image.get_rect(), 
+                width=5,
+                border_radius=10
+                )
+            
         if self.colliding:
             pygame.draw.rect(
                 self.image,
@@ -60,4 +70,4 @@ class Card(pygame.sprite.Sprite):
                 self.image.get_rect(),
                 width=5,
                 border_radius=10
-            )
+                )

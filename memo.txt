@@ -1,0 +1,7 @@
+#MEMO
+
+##notes on layers
+- The layers of Cards is limited within the range of 0 to 999
+- The layers of Ui    is limited within the range of 1000 to 1999
+
+##copyed txt
