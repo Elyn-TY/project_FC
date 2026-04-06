@@ -6,7 +6,7 @@ import class_quit_button
 
 pygame.init()
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-pygame.display.set_caption("Free Sell")
+pygame.display.set_caption("Free Cell")
 
 cards = pygame.sprite.LayeredUpdates()
 ui = pygame.sprite.LayeredUpdates()
@@ -17,7 +17,7 @@ x_t = 0 + 20
 y_t = 0 + 50
 for suit in suits:  # カードの生成
     for rank in ranks:
-        card = class_card.Card(x_t, y_t, suit, rank, layer=0)
+        card = class_card.Card(x_t, y_t, suit, rank, layer=500)
         cards.add(card, layer=card.layer)
         x_t += 70
     x_t = 0 + 20
@@ -102,10 +102,9 @@ while running:  # メインループ開始
     cards.update()
     # Uiの更新と描画
     ui.update()
-    for c in cards:
-        screen.blit(c.image, c.rect)
-    for u in ui:
-        screen.blit(u.image, u.rect)
+    
+    cards.draw(screen)
+    ui.draw(screen)
 
     # マウスの位置を取得
     mouse_pos = pygame.mouse.get_pos()

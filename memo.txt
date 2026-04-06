@@ -1,7 +1,28 @@
 #MEMO
 
 ##notes on layers
-- The layers of Cards is limited within the range of 0 to 999
+- The layers of Cells is limited within the range of 0 to 499
+- The layers of Cards is limited within the range of 500 to 999
 - The layers of Ui    is limited within the range of 1000 to 1999
 
 ##copyed txt
+
+import pygame
+
+class Cell(pygame.sprite.Sprite):
+    def __init__(self, rect):
+        super().__init__()
+        self.image = pygame.Surface((70,100), pygame.SRCALPHA)
+        self.cards = []
+        self.rect = rect
+
+    def update(self):
+        pass
+
+
+    def can_add(self, cards):
+        # 子クラスでオーバーライド
+        raise NotImplementedError
+
+    def add_cards(self, cards):
+        self.cards.extend(cards)
