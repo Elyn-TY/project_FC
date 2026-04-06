@@ -4,10 +4,12 @@ import pygame
 
 
 class Card(pygame.sprite.Sprite):
+        
     def __init__(self, x, y, suit, rank, layer=500):
         super().__init__()  # Spriteクラスの初期化
-        self.layer = layer
-        self.pos = (x, y)
+        font = pygame.font.SysFont("meiryo", 25, bold=True)
+        suit_symbols = {"H": "♥", "D": "♦", "C": "♣", "S": "♠"}
+        self._layer = layer
         self.suit = suit
         self.rank = rank
         self.image = pygame.Surface((70, 100), pygame.SRCALPHA)  # カードのサイズ
@@ -18,9 +20,7 @@ class Card(pygame.sprite.Sprite):
             border_radius=10,  # 丸みの度合い(枠と合わせること！)
         )
         self.text = None
-        self.rect = self.image.get_rect(center=self.pos)
-        font = pygame.font.SysFont("meiryo", 25, bold=True)
-        suit_symbols = {"H": "♥", "D": "♦", "C": "♣", "S": "♠"}
+        self.rect = self.image.get_rect(center=(x, y))
         if self.suit == "H" or self.suit == "D":  # ハートとダイヤは赤色で描画
             self.text = font.render(
                 suit_symbols[self.suit] + " " + self.rank, True, (255, 0, 0)
@@ -35,7 +35,7 @@ class Card(pygame.sprite.Sprite):
         )  # カードの中心にテキストを配置
         self.image.blit(self.text, self.text_rect)
         self.dragging = False
-        self.target_pos = self.pos
+        self.drag_offset = (0, 0)
         self.colliding = False
         self.setted = False
         pygame.draw.rect(
@@ -47,7 +47,6 @@ class Card(pygame.sprite.Sprite):
     def update(self):
         self.image = self.base_image.copy()  # カードの画像をリセット
         if self.dragging:
-            self.rect.center = self.target_pos
             pygame.draw.rect(
                 self.image,
                 (0, 255, 0),  # 緑色のハイライト

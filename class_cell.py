@@ -5,8 +5,9 @@ class Cell(pygame.sprite.Sprite):
     def __init__(self, x, y, layer=0):
         super().__init__()
         self.rect = pygame.Rect(x, y, 70, 100)
-        self.layer = layer
+        self._layer = layer
         self.image = pygame.Surface((70, 100), pygame.SRCALPHA)
+
         self.cards = []  # このセルに置かれているカードのリスト
         self.base_image = self.image.copy()  # 元の画像を保存
         self.colliding = False

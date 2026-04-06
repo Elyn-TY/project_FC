@@ -18,7 +18,7 @@ y_t = 0 + 50
 for suit in suits:  # カードの生成
     for rank in ranks:
         card = class_card.Card(x_t, y_t, suit, rank, layer=500)
-        cards.add(card, layer=card.layer)
+        cards.add(card, layer=card._layer)
         x_t += 70
     x_t = 0 + 20
     y_t += 120
@@ -63,19 +63,26 @@ while running:  # メインループ開始
                 )  # 最前面のカードを選択
                 dragging_card = top_card
                 dragging_card.dragging = True
+                dragging_card.drag_offset = (
+                    dragging_card.rect.x - event.pos[0],
+                    dragging_card.rect.y - event.pos[1]
+                )
                 cards.change_layer(dragging_card, cards.get_top_layer() + 1)
 
         elif event.type == pygame.MOUSEBUTTONUP:  # マウスのボタンが離されたとき
             if dragging_card:
                 dragging_card.dragging = False
                 cards.change_layer(
-                    dragging_card, dragging_card.layer
+                    dragging_card, dragging_card._layer
                 )  # ドラッグ終了後に元のレイヤーに戻す
                 dragging_card = None
 
         elif event.type == pygame.MOUSEMOTION:  # マウスが動いたとき
             if dragging_card:
-                dragging_card.target_pos = event.pos
+                dragging_card.rect.topleft = (
+                    event.pos[0]+dragging_card.drag_offset[0],
+                    event.pos[1]+dragging_card.drag_offset[1]
+                )
                 cards.change_layer(
                     dragging_card, cards.get_top_layer() + 1
                 )  # ドラッグ中のカードを常に最前面に移動(uiよりは下)

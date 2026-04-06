@@ -8,10 +8,9 @@ import pygame
 class QuitButton(pygame.sprite.Sprite):
     def __init__(self, x, y, layer=1000):
         super().__init__()
-        self.layer = layer
-        self.pos = (x, y)
+        self._layer = layer
         self.image = pygame.Surface((50, 50), pygame.SRCALPHA)
-        self.rect = self.image.get_rect(topleft=self.pos)
+        self.rect = self.image.get_rect(topleft=(x, y))
         pygame.draw.rect(  # ボタンの背景
             self.image,
             (255, 0, 0, 200),  # 塗りつぶし色
