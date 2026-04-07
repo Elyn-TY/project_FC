@@ -44,6 +44,7 @@ while running:  # メインループ開始
         quit_button.colliding = True
     else:
         quit_button.colliding = False
+    
 
     for event in pygame.event.get():  # イベント判定開始
         if event.type == pygame.QUIT:  # ウィンドウの×ボタンが押されたとき
@@ -64,13 +65,14 @@ while running:  # メインループ開始
                 dragging_card = top_card
                 dragging_card.dragging = True
                 dragging_card.drag_offset = (
-                    dragging_card.rect.x - event.pos[0],
-                    dragging_card.rect.y - event.pos[1]
-                )
+                    dragging_card.rect.x - pygame.mouse.get_pos()[0],
+                    dragging_card.rect.y - pygame.mouse.get_pos()[1]
+                    )
                 cards.change_layer(dragging_card, cards.get_top_layer() + 1)
 
         elif event.type == pygame.MOUSEBUTTONUP:  # マウスのボタンが離されたとき
             if dragging_card:
+                dragging_card.motioning = False
                 dragging_card.dragging = False
                 cards.change_layer(
                     dragging_card, dragging_card._layer
@@ -79,15 +81,17 @@ while running:  # メインループ開始
 
         elif event.type == pygame.MOUSEMOTION:  # マウスが動いたとき
             if dragging_card:
-                dragging_card.rect.topleft = (
-                    event.pos[0]+dragging_card.drag_offset[0],
-                    event.pos[1]+dragging_card.drag_offset[1]
-                )
+                dragging_card.motioning = True
                 cards.change_layer(
                     dragging_card, cards.get_top_layer() + 1
                 )  # ドラッグ中のカードを常に最前面に移動(uiよりは下)
 
     for card in cards:  # すべてのカード同士の衝突をチェック
+        if card.is_cursored(pygame.mouse.get_pos()):
+            card.couple_judge(cards)
+            card.cursored = True
+        else:
+            card.cursored = False
         others = [c for c in cards if c != card]
         for other in others:
             if card.dragging:
