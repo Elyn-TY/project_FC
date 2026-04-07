@@ -13,7 +13,7 @@ I began this game around March 24, 2026, as my first personal project.
 
 ## 機能 (features)
 
-実装済み (Implemented)
+実装済み (Implemented)n\
 -クラスとしてカードを定義 (Define Card as a class)
 -カードのドラッグ (Dragging any card)
 -カード同士の衝突判定 (Collision detection between cards)
